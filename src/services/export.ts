@@ -2,14 +2,15 @@ import PptxGenJS from "pptxgenjs";
 import { Document, Packer, Paragraph, TextRun, HeadingLevel } from "docx";
 import { saveAs } from "file-saver";
 import { Slide, LessonPlan } from "../types";
-import { downloadPPTXFromServer, downloadDOCXFromServer } from "./api";
+import { renderPptxFromServer, renderDocxFromServer } from "./api";
 
 /**
  * 导出 PPT (优先使用后端 Python 生成)
  */
 export async function exportToPPTX(slides: Slide[], templateId?: string) {
   try {
-    await downloadPPTXFromServer(slides, templateId);
+    const title = slides.find(s => s.type === 'cover')?.title || "豆沙包课件";
+    await renderPptxFromServer(slides, title, templateId);
     return;
   } catch (error) {
     console.error('Backend PPTX export failed, falling back to client-side:', error);
@@ -46,7 +47,8 @@ export async function exportToPPTX(slides: Slide[], templateId?: string) {
  */
 export async function exportToDOCX(lessonPlan: LessonPlan) {
   try {
-    await downloadDOCXFromServer(lessonPlan);
+    const title = lessonPlan.title || "豆沙包教案";
+    await renderDocxFromServer(title, lessonPlan);
     return;
   } catch (error) {
     console.error('Backend DOCX export failed, falling back to client-side:', error);

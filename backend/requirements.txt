@@ -3,6 +3,7 @@ uvicorn
 pydantic[email]
 python-dotenv
 openai
+openai-whisper
 supabase>=2.0.0
 python-pptx
 python-docx

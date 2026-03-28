@@ -21,9 +21,13 @@ print("=" * 60)
 print("\n1️⃣  检查环境配置...")
 from dotenv import load_dotenv
 env_file = Path(__file__).parent / ".env"
+root_env = Path(__file__).parent.parent / ".env"
 if env_file.exists():
     load_dotenv(env_file)
-    print("   ✅ .env 文件已加载")
+    print("   ✅ backend/.env 文件已加载")
+elif root_env.exists():
+    load_dotenv(root_env)
+    print("   ✅ root/.env 文件已加载")
 else:
     print("   ⚠️  .env 文件不存在")
 
@@ -106,7 +110,7 @@ for var_name, description in config_vars.items():
 print("\n5️⃣  检查数据库连接...")
 try:
     from backend.repository import supabase_client
-    client = supabase_client.get_client()
+    client = supabase_client.get_supabase_client()
     
     # 尝试执行简单查询
     try:
